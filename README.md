@@ -1,2 +1,2 @@
 # go-vp
-Volume Profile Indicator write in Go
+Volume Profile Indicator written in Go
