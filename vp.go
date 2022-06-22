@@ -40,12 +40,13 @@ type Profile struct {
 	ValueArea  bool
 }
 
-func (vp VP) VolumeProfile(opens, highs, closes, lows, volumes, buys, sells []float64) (profiles []Profile, poc int, highest, lowest, vah, val float64, err error) {
+func (vp VP) VolumeProfile(highs, closes, lows, volumes, buys, sells []float64) (profiles []Profile, poc int, highest, lowest, vah, val float64, err error) {
 	highest = Max(highs)
 	lowest = Min(lows)
-	profiles = makeProfile(highest, lowest, vp.RowSize)
-	for i := 0; i < len(opens); i++ {
-		index := int(math.Floor((closes[i] - lowest) / float64(vp.RowSize)))
+	var step float64
+	profiles, step = makeProfile(highest, lowest, vp.RowSize)
+	for i := 0; i < len(closes); i++ {
+		index := int(math.Floor((closes[i] - lowest) / step))
 		profiles[index].BuyVolume += buys[i]
 		profiles[index].SellVolume += sells[i]
 		profiles[index].Volume += volumes[i]
@@ -92,10 +93,12 @@ func (vp VP) VolumeProfile(opens, highs, closes, lows, volumes, buys, sells []fl
 			}
 		}
 	}
+	vah = profiles[upper-1].High
+	val = profiles[lower+1].Low
 	return
 }
 
-func makeProfile(highest, lowest float64, size int) []Profile {
+func makeProfile(highest, lowest float64, size int) ([]Profile, float64) {
 	step := (highest - lowest) / float64(size)
 	ps := make([]Profile, size)
 	for i := 0; i < len(ps); i++ {
@@ -103,5 +106,5 @@ func makeProfile(highest, lowest float64, size int) []Profile {
 		ps[i].Low = lowest + step*float64(i)
 		ps[i].High = ps[i].Low + step
 	}
-	return ps
+	return ps, step
 }
