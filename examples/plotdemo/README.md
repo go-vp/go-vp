@@ -8,9 +8,9 @@ API_KEY=xxx SECRET_KEY=yyy go run .
 
 计算完 Volume Profile 后会在 `examples/plotdemo/results.html` 绘制图表：
 
-![kline](./examples/plotdemo/kline.png)
+![kline](https://github.com/go-vp/go-vp/blob/main/examples/plotdemo/kline.png?raw=true)
 
-![vp](./examples/plotdemo/vp.png)
+![vp](https://github.com/go-vp/go-vp/blob/main/examples/plotdemo/vp.png?raw=true)
 
 
 
