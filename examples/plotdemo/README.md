@@ -4,6 +4,9 @@
 ```bash
 cd examples/plotdemo
 API_KEY=xxx SECRET_KEY=yyy go run .
+
+# Windows (powershell)
+set API_KEY=xxx;set SECRET_KEY=yyy; go run .
 ```
 
 计算完 Volume Profile 后会在 `examples/plotdemo/results.html` 绘制图表：

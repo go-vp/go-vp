@@ -5,9 +5,10 @@ import (
 
 	"github.com/go-echarts/go-echarts/v2/charts"
 	"github.com/go-echarts/go-echarts/v2/opts"
+	"github.com/go-vp/vp"
 )
 
-func KLineGetter(symbol string, timeframe string, klines KLineData, poc float64) (chart *charts.Kline) {
+func KLineGetter(symbol string, timeframe string, klines KLineData, poc float64, profiles []vp.Profile, normal []float64) (chart *charts.Kline) {
 
 	kline := charts.NewKLine()
 
@@ -33,6 +34,10 @@ func KLineGetter(symbol string, timeframe string, klines KLineData, poc float64)
 			Title:    symbol + " Price & PoC",
 			Subtitle: beginTime + "~" + endTime + ", " + symbol + ", " + timeframe,
 		}),
+		charts.WithSingleAxisOpts(opts.SingleAxis{
+			Min: profiles[0].Low,
+			Max: profiles[len(profiles)-1].High,
+		}),
 		charts.WithXAxisOpts(opts.XAxis{
 			SplitNumber: 20,
 		}),
@@ -52,5 +57,23 @@ func KLineGetter(symbol string, timeframe string, klines KLineData, poc float64)
 				YAxis: fmt.Sprintf("%f", poc),
 			}),
 		)
+
+	liq := make([]float64, len(profiles))
+	for i, p := range profiles {
+		liq[i] = normal[i] - (p.BuyVolume - p.SellVolume)
+	}
+
+	for i, p := range profiles {
+		if i > 0 {
+			if liq[i]*liq[i-1] < 0 {
+				kline.SetSeriesOptions(
+					charts.WithMarkLineNameYAxisItemOpts(opts.MarkLineNameYAxisItem{
+						Name:  "Liq",
+						YAxis: fmt.Sprintf("%.2f", p.Low),
+					}),
+				)
+			}
+		}
+	}
 	return kline
 }

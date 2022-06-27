@@ -1,22 +1,25 @@
 package main
 
-// func getNormal(mean float64, variance float64, x []float64, y[]float64) (normal []float64){
+import (
+	"math"
 
-// 	yh :=  x
-// 	dist := gaussian.NewGaussian(mean, variance)
-// 	for i, xi := range x {
-// 		yh[i] = dist.Pdf(xi - mean)
-// 	}
-// }
+	"github.com/chobie/go-gaussian"
+	"github.com/go-vp/vp"
+	"gonum.org/v1/gonum/stat"
+)
 
-// func getResidual(y []float64, yh []float64) (residual float64)
-// {
+func FitNormal(mu float64, sigma float64, profiles []vp.Profile) (normal []float64) {
+	yh := []float64{}
+	y := []float64{}
+	dist := gaussian.NewGaussian(mu, math.Pow(sigma, 2))
+	for _, p := range profiles {
+		yh = append(yh, dist.Pdf((p.High+p.Low)/2.0))
+		y = append(y, p.BuyVolume-p.SellVolume)
+	}
+	_, beta := stat.LinearRegression(yh, y, nil, true)
+	for i, _ := range yh {
+		yh[i] = beta * yh[i]
+	}
 
-// }
-
-// func ProfileOptimizer(profiles []vp.Profile, stddev float64, fairPrice float64) (expected []vp.Profile, residual float64) {
-
-// 	finalSdv := stddev
-// 	Get
-
-// }
+	return yh
+}

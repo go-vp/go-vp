@@ -35,13 +35,16 @@ func main() {
 	var bins int = 13
 
 	data := GetKLineData(symbol, timeframe)
-	profiles, poc, _ := ProfileGetter(data, bins)
-	kline := KLineGetter(symbol, timeframe, data, poc)
-	bar := BarGetter(symbol, timeframe, profiles)
+	profiles, poc, stddev := ProfileGetter(data, bins)
+	normal := FitNormal(poc, stddev, profiles)
+	vp := VPBarGetter(symbol, timeframe, profiles, normal)
+	liq := LiquidityBarGetter(symbol, timeframe, profiles, normal)
+	kline := KLineGetter(symbol, timeframe, data, poc, profiles, normal)
 
 	f, _ := os.Create("results.html")
+	liq.Render(f)
+	vp.Render(f)
 	kline.Render(f)
-	bar.Render(f)
 
 	openHtml(f.Name())
 }
