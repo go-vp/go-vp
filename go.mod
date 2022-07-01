@@ -2,7 +2,12 @@ module github.com/go-vp/vp
 
 go 1.17
 
-require github.com/adshao/go-binance/v2 v2.3.6
+require (
+	github.com/adshao/go-binance/v2 v2.3.6
+	github.com/chobie/go-gaussian v0.0.0-20150107165016-53c09d90eeaf
+	github.com/go-echarts/go-echarts/v2 v2.2.4
+	gonum.org/v1/gonum v0.11.0
+)
 
 require (
 	github.com/bitly/go-simplejson v0.5.0 // indirect

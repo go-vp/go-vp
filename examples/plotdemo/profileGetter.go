@@ -48,7 +48,7 @@ func GetKLineData(symbol string, interval string) (ret KLineData) {
 		closes = append(closes, str2float64(k.Close))
 		opens = append(opens, str2float64(k.Open))
 		v := str2float64(k.Volume)
-		t := str2float64(k.TakerBuyQuoteAssetVolume)
+		t := str2float64(k.TakerBuyBaseAssetVolume)
 		volumes = append(volumes, v)
 		takers = append(takers, t)
 		makers = append(makers, v-t)

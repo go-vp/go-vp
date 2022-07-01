@@ -25,7 +25,7 @@ func main() {
 		lows = append(lows, str2float64(k.Low))
 		closes = append(closes, str2float64(k.Close))
 		v := str2float64(k.Volume)
-		t := str2float64(k.TakerBuyQuoteAssetVolume)
+		t := str2float64(k.TakerBuyBaseAssetVolume)
 		volumes = append(volumes, v)
 		takers = append(takers, t)
 		makers = append(makers, v-t)
